@@ -10,6 +10,7 @@ orientation = portrait
 fullscreen = 0
 android.accept_sdk_license = True
 android.permissions = android.permission.INTERNET
+icon.filename = icon.png
 
 [buildozer]
 log_level = 2
