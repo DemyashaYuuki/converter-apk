@@ -7,22 +7,24 @@ on:
 
 jobs:
   build-android:
-    name: Build for Android
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          workdir: .
-          buildozer_version: stable
+      - name: Build APK with official Buildozer Docker image
+        run: |
+          mkdir -p .buildozer
+          docker pull ghcr.io/kivy/buildozer:latest
+          docker run --rm \
+            -v "$PWD":/home/user/hostcwd \
+            -v "$PWD/.buildozer":/home/user/.buildozer \
+            ghcr.io/kivy/buildozer:latest \
+            android debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: apk
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
